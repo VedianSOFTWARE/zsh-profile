@@ -1,0 +1,62 @@
+function git_push_with_upstream() {
+    BRANCH_NAME=$(git symbolic-ref --short HEAD)
+    REMOTE_BRANCH=$(git rev-parse --symbolic-full-name --abbrev-ref @{u} 2>/dev/null)
+
+    if [ -z "$REMOTE_BRANCH" ]; then
+        git push -u origin "$BRANCH_NAME"
+    else
+        git push
+    fi
+}
+
+function commitFunction() {
+    
+    BRANCH_NAME=$(git symbolic-ref --short HEAD)
+    ISSUE_KEY=$(echo $BRANCH_NAME | grep -o -E '([A-Z]+-[0-9]+)')
+    COMMIT_MESSAGE="$ISSUE_KEY: $@"
+    git commit -m "$COMMIT_MESSAGE"
+}
+
+function optimizeClear() {
+    du
+    artisan optimize:clear
+    artisan config:cache
+    artisan optimize
+}
+
+function aliases() {
+    alias_lines=("${(@f)$(grep -E "alias .+='.+'" ~/.zsh_alias)}")
+
+    for line in $alias_lines; do
+
+        a_line=$(echo "$line" | sed 's/alias //')
+        alias_name=$(echo "$a_line" | cut -d "=" -f 1)
+        alias_function=$(echo "$a_line" | cut -d "=" -f 2- | tr -d "'")
+        # echo -e "$alias_name\t$alias_function" | column -t -s $'\t'
+
+        printf "\033[0;31m%-20s\033[0m \t%s\n" "$alias_name" "$alias_function"
+        # printf "%-20s \t%s\n" "$alias_name" "$alias_function"
+        
+    done
+}
+
+function makeModel() {
+
+
+    if [[ $1 == -* ]]; then
+        OPTION=$1
+        shift
+    else
+        OPTION=$1
+    fi
+
+    artisan make:model $OPTION
+
+    cd app/Models
+    mv $1.php /home/tom/packages/vedian-cms/src/Models/$1.php
+    # Change namespace from App\Models to VedianCMS\Models
+    sed -i 's/App\\Models/VedianCMS\\Models/g' /home/tom/packages/vedian-cms/src/Models/$1.php
+
+    website
+    
+}
