@@ -1,14 +1,19 @@
 #!/bin/zsh
-export ZSH_PROFILE="$HOME/zsh-profile"
-export PROJECTS="$HOME/projects"
 
-ALIASES="$ZSH_PROFILE/.zsh_aliases"
-FUNCTIONS="$ZSH_PROFILE/.zsh_functions"
-
-source $ALIASES
-source $FUNCTIONS
 # Keychain
 if [ -f /usr/bin/keychain ]; then
     /usr/bin/keychain --nogui ~/.ssh/id_rsa
-    source $HOME/.keychain/Mottie-PC
+    source $HOME/.keychain/Mottie-PC-sh
 fi
+
+# Path
+export ZSH_PROFILE="$HOME/zsh-profile"
+export PROJECTS="$HOME/projects"
+
+# Aliases
+ALIASES="$ZSH_PROFILE/.zsh_aliases"
+FUNCTIONS="$ZSH_PROFILE/.zsh_functions"
+
+# Load
+source $ALIASES
+source $FUNCTIONS
