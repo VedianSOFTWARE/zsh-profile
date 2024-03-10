@@ -7,7 +7,6 @@ FUNCTIONS="$ZSH_PROFILE/.zsh_functions"
 
 source $ALIASES
 source $FUNCTIONS
-
 # Keychain
 if [ -f /usr/bin/keychain ]; then
     /usr/bin/keychain --nogui ~/.ssh/id_rsa
